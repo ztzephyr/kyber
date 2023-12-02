@@ -222,7 +222,10 @@ void indcpa_keypair(uint8_t pk[KYBER_INDCPA_PUBLICKEYBYTES],
   for(i=0;i<KYBER_K;i++)
     poly_getnoise_eta1(&e.vec[i], noiseseed, nonce++);
 
+  // polyVecPrintf(&skpv, "nttinput:");
   polyvec_ntt(&skpv);
+  // polyVecPrintf(&skpv, "nttoutput:");
+
   polyvec_ntt(&e);
 
   // matrix-vector multiplication

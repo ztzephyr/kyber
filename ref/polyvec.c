@@ -2,6 +2,7 @@
 #include "params.h"
 #include "poly.h"
 #include "polyvec.h"
+#include <stdio.h>
 
 /*************************************************
 * Name:        polyvec_compress
@@ -230,4 +231,47 @@ void polyvec_add(polyvec *r, const polyvec *a, const polyvec *b)
   unsigned int i;
   for(i=0;i<KYBER_K;i++)
     poly_add(&r->vec[i], &a->vec[i], &b->vec[i]);
+}
+
+
+void polyVecPrintf(polyvec* r, const char* name)
+{
+  static int stat = 0;
+  stat++;
+
+  if (stat > 10)
+  {
+    return;
+  }
+
+  FILE* file = fopen("D:\\github\\http\\repo\\kyber\\mytest\\kyber_data.txt", "a+");
+
+  int m = sizeof(r->vec)/ sizeof(r->vec[0]);
+  int n =  sizeof(r->vec[0].coeffs)/ sizeof(r->vec[0].coeffs[0]);
+  for (int i = 0; i < m; i++)
+  {
+    int count = 0;
+    fprintf(file, "start>>>>>> \n%s%d = {\n", name,i);
+    
+    for (int j = 0; j < n; j++)
+    {
+      // "(int16_t)0x%-8x"
+      fprintf(file, "(int16_t)0x%x", r->vec[i].coeffs[j]);
+      count++;
+      if (count < m * n)
+      {
+        fprintf(file, ", ");
+      }
+
+      if (count%16 == 0)
+      {
+        printf("\n");
+      }
+    }
+
+    fprintf(file, " } end; count= %d \n", count);
+  }
+  
+  fclose(file);
+  printf("written  successfully.\n");
 }
