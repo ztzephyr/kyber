@@ -6,6 +6,7 @@
 #include "verify.h"
 #include "symmetric.h"
 #include "randombytes.h"
+#include "z_util.h"
 
 /*************************************************
 * Name:        crypto_kem_keypair
@@ -29,7 +30,9 @@ int crypto_kem_keypair(uint8_t *pk,
     sk[i+KYBER_INDCPA_SECRETKEYBYTES] = pk[i];
   hash_h(sk+KYBER_SECRETKEYBYTES-2*KYBER_SYMBYTES, pk, KYBER_PUBLICKEYBYTES);
   /* Value z for pseudo-random output on reject */
-  randombytes(sk+KYBER_SECRETKEYBYTES-KYBER_SYMBYTES, KYBER_SYMBYTES);
+  // randombytes(sk+KYBER_SECRETKEYBYTES-KYBER_SYMBYTES, KYBER_SYMBYTES);
+  genRandomBytes(sk+KYBER_SECRETKEYBYTES-KYBER_SYMBYTES, KYBER_SYMBYTES);
+  printArray(sk+KYBER_SECRETKEYBYTES-KYBER_SYMBYTES, KYBER_SYMBYTES, "kem_seed");
   return 0;
 }
 

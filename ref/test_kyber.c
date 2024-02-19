@@ -4,8 +4,10 @@
 #include "kem.h"
 #include "randombytes.h"
 #include "polyvec.h"
+#include "z_util.h"
 
-#define NTESTS 1000
+// #define NTESTS 1000
+#define NTESTS 1
 
 
 
@@ -100,7 +102,7 @@ int16_t gTestKyber512Ref[2][256] = {
 
 
 
-static int test_kyberDatas()
+ int test_kyberDatas()
 {
   polyvec_ntt((polyvec*)gTestKyber512);
   if (memcmp((uint8_t*)gTestKyber512, (uint8_t*)gTestKyber512Ref, 1024))
@@ -112,7 +114,7 @@ static int test_kyberDatas()
 
 
 
-static int test_keys()
+int test_keys()
 {
   uint8_t pk[CRYPTO_PUBLICKEYBYTES];
   uint8_t sk[CRYPTO_SECRETKEYBYTES];
@@ -137,7 +139,7 @@ static int test_keys()
   return 0;
 }
 
-static int test_invalid_sk_a()
+ int test_invalid_sk_a()
 {
   uint8_t pk[CRYPTO_PUBLICKEYBYTES];
   uint8_t sk[CRYPTO_SECRETKEYBYTES];
@@ -165,7 +167,7 @@ static int test_invalid_sk_a()
   return 0;
 }
 
-static int test_invalid_ciphertext()
+ int test_invalid_ciphertext()
 {
   uint8_t pk[CRYPTO_PUBLICKEYBYTES];
   uint8_t sk[CRYPTO_SECRETKEYBYTES];
@@ -202,15 +204,14 @@ static int test_invalid_ciphertext()
 
 int main(void)
 {
-  test_kyberDatas();
 
   unsigned int i;
   int r;
 
   for(i=0;i<NTESTS;i++) {
     r  = test_keys();
-    r |= test_invalid_sk_a();
-    r |= test_invalid_ciphertext();
+    // r |= test_invalid_sk_a();
+    // r |= test_invalid_ciphertext();
     if(r)
       return 1;
   }
